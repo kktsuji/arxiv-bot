@@ -6,8 +6,6 @@ import os
 
 import arxiv
 import requests
-from dotenv import load_dotenv  # delete for aws lambda
-load_dotenv(".env")  # delete for aws lambda
 
 
 def _make_query(keywords, categories, yesterday_str):
@@ -34,10 +32,10 @@ def _requests_post(webhook_url, text):
     )
 
 
-def _main():
-    webhook_url = os.getenv("WEBHOOK_URL")
-    keywords = os.getenv("KEYWORDS").split(",")
-    categories = os.getenv("CATEGORIES").split(",")
+def _notify(params):
+    webhook_url = params["webhook_url"]
+    keywords = params["keywords"].split(",")
+    categories = params["categories"].split(",")
 
     today = datetime.datetime.now(datetime.timezone.utc).date()
     yesterday = today - datetime.timedelta(days=1)
@@ -77,5 +75,23 @@ def _main():
             _requests_post(webhook_url, text)
 
 
+def lambda_handler(event, context):
+    """Lambda handler for AWS Lambda."""
+    print(event)
+    _notify(event)
+    # return 'Process completed.'
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
+
+
 if __name__ == "__main__":
-    _main()
+    from dotenv import load_dotenv
+    load_dotenv(".env")
+    params = {
+        "webhook_url": os.getenv("WEBHOOK_URL"),
+        "keywords": os.getenv("KEYWORDS").split(","),
+        "categories": os.getenv("CATEGORIES").split(",")
+    }
+    _notify(params)
