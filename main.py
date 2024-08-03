@@ -60,8 +60,10 @@ def _requests_post(webhook_url, text):
 
 def _exec(params):
     webhook_url = params["webhook_url"]
-    keywords = params["keywords"].split(",")
-    categories = params["categories"].split(",")
+    keywords = params["keywords"].replace(" ", ",").split(",")
+    keywords = list(set(keywords))
+    keywords = [k for k in keywords if k != ""]
+    categories = params["categories"].replace(" ", "").split(",")
 
     day = datetime.now(timezone.utc).date() - timedelta(days=1)
     day_m = day.strftime("%b")
