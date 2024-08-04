@@ -72,17 +72,17 @@ def _exec(params):
     num_results = len(results)
 
     text = f"New papers on {day_m} {day.day}, {day.year}.\n"
-    text += f'Query: "{query}"\n'
+    num = "No" if num_results == 0 else num_results
+    text += f"{num} papers found.\n"
+    text += "--------------\n"
+    text += f'arXiv query: "{query}"\n'
+    text += "arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n"
+    text += "This bot: https://github.com/kktsuji/arxiv-bot\n"
+    _requests_post(webhook_url, text)
 
-    if num_results == 0:
-        text += "No papers found.\n"
+    for r in results:
+        text = _make_post_contents(r)
         _requests_post(webhook_url, text)
-    else:
-        text += f"{num_results} papers found.\n"
-        _requests_post(webhook_url, text)
-        for r in results:
-            text = _make_post_contents(r)
-            _requests_post(webhook_url, text)
 
 
 def lambda_handler(event, context):
