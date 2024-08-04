@@ -2,6 +2,15 @@
 
 Notify to webhooks of new papers on arXiv.
 
+## Webhook Settings
+
+Get webhook url of the service you want to notify.
+
+* [Slack Incoming Webhooks](https://api.slack.com/messaging/webhooks)
+* [Microsoft Teams Incoming Webhooks](https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=newteams%2Cdotnet)
+* [Discord Webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
+* etc.
+
 ## Local Execution
 
 ### Check Environment
