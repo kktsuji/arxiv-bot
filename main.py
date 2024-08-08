@@ -12,7 +12,8 @@ def _make_query(keywords, categories, day):
     # https://info.arxiv.org/help/api/user-manual.html for query syntax
     query = "%28"
     for k in keywords:
-        query += f'ti:"{k}" OR abs:"{k}" OR '
+        k_tmp = f"'{k}'" if k.find(" ") != -1 else k
+        query += f'ti:"{k_tmp}" OR abs:"{k_tmp}" OR '
     query = query[:-4] + "%29 AND %28"
     for c in categories:
         query += f'cat:"{c}" OR '
@@ -59,7 +60,7 @@ def _requests_post(webhook_url, text):
 
 def _exec(params):
     webhook_url = params["webhook_url"]
-    keywords = params["keywords"].replace(" ", ",").split(",")
+    keywords = params["keywords"].split(",")
     keywords = list(set(keywords))
     keywords = [k for k in keywords if k != ""]
     categories = params["categories"].replace(" ", "").split(",")
