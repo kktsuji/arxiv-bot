@@ -56,7 +56,7 @@ CATEGORIES=cs.AI,cs.CV,cs.LG,eess.IV
 | Key | Description |
 |----------|----------|
 | webhook_url | The webhook url such as Slack, Teams, and other service APIs. |
-| keywords | Keywords used in queries for arXiv searches.<br>Each keyword is separated by a comma with no spaces.<br>Keywords are used to search titles and abstracts.<br>Keywords are searched for with "or".<br>For example, if the value "keyword1,keyword2" is specified, paper containing "keyword1" and papers containing "keyword2" will be displayed as search results.<br>For a more specific example, if the value is "deep learning, contrastive learning", it equals to "deep,contrastive,learning" (spaces and replaced by commas and duplicate words are ignored). |
+| keywords | Keywords used in queries for arXiv searches.<br>Each keyword is separated by a comma with no spaces.<br>Keywords are used to search titles and abstracts and are searched for with "or".<br>For example, if the value "keyword1,key word2" is specified, paper containing keyword1 and papers containing 'key word2' will be displayed as search results (if a keyword contains spaces, single quotation marks are be used). |
 | categories | Categories used in queries for arXiv searches.<br>This follows the same rule of keywords (separated by comma without space, searched with "or"). And spaces are removed.<br>For more details, see [arXiv Category Taxonomy](https://arxiv.org/category_taxonomy). |
 
 Execute script.
