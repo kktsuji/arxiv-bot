@@ -35,10 +35,9 @@ def _get_arxiv_results(query):
 def _make_post_contents(r):
     text = (
         f"Title: {r.title}\n"
-        + f"First Author: {r.authors[0]}\n"
+        + f"Authors: {r.authors[0]} et al.\n"
         + f"Published: {r.published}\n"
-        + f"Entry: {r.pdf_url.replace('pdf','abs')[:-2]}\n"
-        + f"PDF: {r.pdf_url}\n"
+        + f"Link: {r.pdf_url.replace('pdf','abs')[:-2]}\n"
         + f"Categories: {r.categories}\n"
         + f"Abstract: {r.summary.replace('\n',' ')}\n"
     )
@@ -76,8 +75,10 @@ def _exec(params):
     text += f"{num} papers found.\n"
     text += "--------------\n"
     text += f'arXiv query: "{query}"\n'
-    text += "arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n"
-    text += "This bot: https://github.com/kktsuji/arxiv-bot\n"
+    text += (
+        "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n"
+    )
+    text += "About this bot: https://github.com/kktsuji/arxiv-bot\n"
     _requests_post(webhook_url, text)
 
     for r in results:
