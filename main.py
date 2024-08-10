@@ -5,6 +5,7 @@ import json
 import os
 
 import arxiv
+from openai import OpenAI
 import requests
 
 
@@ -33,20 +34,46 @@ def _get_arxiv_results(query):
     return results
 
 
-def _make_post_contents(r):
+def _make_post_contents(r, abstract):
     text = (
-        f"Title: {r.title}\n"
-        + f"Authors: {r.authors[0]} et al.\n"
-        + f"Published: {r.published}\n"
-        + f"Link: {r.pdf_url.replace('pdf','abs')[:-2]}\n"
-        + f"Categories: {r.categories}\n"
-        + f"Abstract: {r.summary.replace('\n',' ')}\n"
+        f"Title: {r.title}\n\n"
+        + f"Authors: {r.authors[0]} et al.\n\n"
+        + f"Published: {r.published}\n\n"
+        + f"Link: {r.pdf_url.replace('pdf','abs')[:-2]}\n\n"
+        + f"Categories: {r.categories}\n\n"
+        + abstract
     )
     return text
 
 
+def _get_openai_response(title, abstract):
+    system_message = (
+        "Generate a brief and simple summary of the document "
+        "according to these formats:\n"
+        "* Introduction:\n"
+        "* Challenging:\n"
+        "* Methods:\n"
+        "* Novelties:\n"
+        "* Results:\n"
+        "* Performances:\n"
+        "* Limitations:\n"
+        "* Discussion:\n"
+    )
+    user_message = f"Title: {title}\nAbstract: {abstract}"
+
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": user_message},
+        ],
+    )
+    return response.choices[0].message.content
+
+
 def _requests_post(webhook_url, text):
-    tmp = "--------------\n"
+    tmp = "--------------\n\n"
     requests.post(
         webhook_url,
         data=json.dumps(
@@ -71,19 +98,24 @@ def _exec(params):
     results = _get_arxiv_results(query)
     num_results = len(results)
 
-    text = f"New papers on {day_m} {day.day}, {day.year}.\n"
+    text = f"New papers on {day_m} {day.day}, {day.year}.\n\n"
     num = "No" if num_results == 0 else num_results
-    text += f"{num} papers found.\n"
-    text += "--------------\n"
-    text += f'arXiv query: "{query}"\n'
+    text += f"{num} papers found.\n\n"
+    text += "--------------\n\n"
+    text += f'arXiv query: "{query}"\n\n'
     text += (
-        "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n"
+        "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n\n"
     )
-    text += "About this bot: https://github.com/kktsuji/arxiv-bot\n"
+    text += "About this bot: https://github.com/kktsuji/arxiv-bot\n\n"
     _requests_post(webhook_url, text)
 
     for r in results:
-        text = _make_post_contents(r)
+        abstract = r.summary.replace("\n", " ")
+        if params["openai_api_key"] != "":
+            abstract = _get_openai_response(r.title, abstract)
+        else:
+            abstract = f"Abstract: {abstract}\n\n"
+        text = _make_post_contents(r, abstract)
         _requests_post(webhook_url, text)
 
 
@@ -101,5 +133,6 @@ if __name__ == "__main__":
         "webhook_url": os.getenv("WEBHOOK_URL"),
         "keywords": os.getenv("KEYWORDS"),
         "categories": os.getenv("CATEGORIES"),
+        "openai_api_key": os.getenv("OPENAI_API_KEY"),
     }
     _exec(params)
