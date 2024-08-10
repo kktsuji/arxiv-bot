@@ -2,7 +2,7 @@
 
 Notify to webhooks of new papers on arXiv.
 
-Generate a brief and short summary of papers by using by OpenAI's ChatGPT.
+Generate a brief and short summary of papers by using OpenAI's ChatGPT.
 
 ## Webhook Settings
 
