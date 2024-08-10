@@ -51,7 +51,7 @@ def _get_openai_response(title, abstract):
         "Generate a brief and simple summary of the document "
         "according to these formats:\n"
         "* Introduction:\n"
-        "* Challenging:\n"
+        "* Challenges:\n"
         "* Methods:\n"
         "* Novelties:\n"
         "* Results:\n"
@@ -112,7 +112,7 @@ def _exec(params):
     for r in results:
         abstract = r.summary.replace("\n", " ")
         if params["openai_api_key"] != "":
-            abstract = _get_openai_response(r.title, abstract)
+            abstract = _get_openai_response(r.title, abstract) + "\n\n"
         else:
             abstract = f"Abstract: {abstract}\n\n"
         text = _make_post_contents(r, abstract)
