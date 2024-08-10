@@ -2,14 +2,24 @@
 
 Notify to webhooks of new papers on arXiv.
 
+Generate a brief and short summary of papers by using by OpenAI's ChatGPT.
+
 ## Webhook Settings
 
 Get webhook url of the service you want to notify.
 
 * [Slack Incoming Webhooks](https://api.slack.com/messaging/webhooks)
-* [Microsoft Teams Incoming Webhooks](https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=newteams%2Cdotnet)
+* [Microsoft Teams Webhooks](https://learn.microsoft.com/en-us/power-automate/teams/create-flows-power-apps-app)
 * [Discord Webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 * etc.
+
+## (Optional) OpenAI Settings
+
+Get OpenAI API Key if you want to summary papers.
+
+Note: The OpenAI API is chargeable.
+
+* [OpenAI API](https://openai.com/api/)
 
 ## Local Execution
 
@@ -51,18 +61,26 @@ vim .env
 WEBHOOK_URL=https://YOUR_WEBHOOK_URL
 KEYWORDS=keyword1,keyword2,keyword3
 CATEGORIES=cs.AI,cs.CV,cs.LG,eess.IV
+OPENAI_API_KEY=YOUR_API_KEY
 ```
 
 | Key | Description |
 |----------|----------|
-| webhook_url | The webhook url such as Slack, Teams, and other service APIs. |
-| keywords | Keywords used in queries for arXiv searches.<br>Each keyword is separated by a comma with no spaces.<br>Keywords are used to search titles and abstracts and are searched for with "or".<br>For example, if the value "keyword1,key word2" is specified, paper containing keyword1 and papers containing 'key word2' will be displayed as search results (if a keyword contains spaces, single quotation marks are be used). |
-| categories | Categories used in queries for arXiv searches.<br>This follows the same rule of keywords (separated by comma without space, searched with "or"). And spaces are removed.<br>For more details, see [arXiv Category Taxonomy](https://arxiv.org/category_taxonomy). |
+| WEBHOOK_URL | The webhook url such as Slack, Teams, and other service APIs. |
+| KEYWORDS | Keywords used in queries for arXiv searches.<br>Each keyword is separated by a comma with no spaces.<br>Keywords are used to search titles and abstracts and are searched for with "or".<br>For example, if the value "keyword1,key word2" is specified, paper containing keyword1 and papers containing 'key word2' will be displayed as search results (if a keyword contains spaces, single quotation marks are be used). |
+| CATEGORIES | Categories used in queries for arXiv searches.<br>This follows the same rule of keywords (separated by comma without space, searched with "or"). And spaces are removed.<br>For more details, see [arXiv Category Taxonomy](https://arxiv.org/category_taxonomy). |
+| OPENAI_API_KEY | (Optional) OpenAI API Key.<br>If you do not use the paper summarization function, please leave blank in ``.env`` file like bellow:<br>OPENAI_API_KEY= |
 
 Execute script.
 
 ```python
 python main.py
+```
+
+(Optional) Execute unit tests.
+
+```python
+pytest
 ```
 
 ## AWS Execution
