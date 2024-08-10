@@ -10,7 +10,7 @@ import requests
 
 
 def _make_query(keywords, categories, day):
-    # https://info.arxiv.org/help/api/user-manual.html for query syntax
+    # https://info.arxiv.org/help/api/user-manual.html for arXiv query syntax
     query = "%28"
     for k in keywords:
         k_tmp = f"'{k}'" if k.find(" ") != -1 else k
@@ -61,6 +61,7 @@ def _get_openai_response(title, abstract):
     )
     user_message = f"Title: {title}\nAbstract: {abstract}"
 
+    # https://platform.openai.com/docs/overview for OpenAI API
     client = OpenAI()
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
