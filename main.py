@@ -121,6 +121,7 @@ def _exec(params):
 
 def lambda_handler(event, context):
     """Lambda handler for AWS Lambda."""
+    os.environ["OPENAI_API_KEY"] = event["openai_api_key"]
     _exec(event)
     return {"statusCode": 200, "body": json.dumps("Process completed.")}
 
