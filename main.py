@@ -39,7 +39,7 @@ def _make_post_contents(r, abstract):
         f"Title: {r.title}\n\n"
         + f"Authors: {r.authors[0]} et al.\n\n"
         + f"Published: {r.published}\n\n"
-        + f"Link: {r.pdf_url.replace('pdf','abs')[:-2]}\n\n"
+        + f"Link: {r.entry_id}\n\n"
         + f"Categories: {r.categories}\n\n"
         + abstract
     )
@@ -75,15 +75,16 @@ def _get_openai_response(title, abstract):
 
 def _requests_post(webhook_url, text):
     tmp = "--------------\n\n"
-    requests.post(
-        webhook_url,
-        data=json.dumps(
-            {
-                "text": text + tmp,
-            }
-        ),
-        timeout=5.0,
-    )
+    print(text + tmp)
+    # requests.post(
+    #     webhook_url,
+    #     data=json.dumps(
+    #         {
+    #             "text": text + tmp,
+    #         }
+    #     ),
+    #     timeout=5.0,
+    # )
 
 
 def _exec(params):
