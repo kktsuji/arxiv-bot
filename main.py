@@ -37,11 +37,10 @@ def _get_arxiv_results(query):
 def _make_post_contents(r, abstract):
     text = (
         f"Title: {r.title}\n\n"
-        + f"Authors: {r.authors[0]} et al.\n\n"
-        + f"Published: {r.published}\n\n"
-        + f"Link: {r.entry_id}\n\n"
-        + f"Categories: {r.categories}\n\n"
-        + abstract
+        "Authors: {r.authors[0]} et al.\n\n"
+        "Published: {r.published}\n\n"
+        "Link: {r.entry_id}\n\n"
+        "Categories: {r.categories}\n\n" + abstract
     )
     return text
 
@@ -75,16 +74,15 @@ def _get_openai_response(title, abstract):
 
 def _requests_post(webhook_url, text):
     tmp = "--------------\n\n"
-    print(text + tmp)
-    # requests.post(
-    #     webhook_url,
-    #     data=json.dumps(
-    #         {
-    #             "text": text + tmp,
-    #         }
-    #     ),
-    #     timeout=5.0,
-    # )
+    requests.post(
+        webhook_url,
+        data=json.dumps(
+            {
+                "text": text + tmp,
+            }
+        ),
+        timeout=5.0,
+    )
 
 
 def _exec(params):
