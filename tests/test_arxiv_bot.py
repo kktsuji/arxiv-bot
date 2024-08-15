@@ -48,7 +48,6 @@ def test_get_arxiv_response():
 def test_make_header_contents_no_papers_found():
     """Unit test for _make_header_contents."""
     day = datetime.datetime(2024, 1, 1, 0, 0, 0, tzinfo=datetime.timezone.utc)
-    day_m = "Jan"
     query = "id:1812.04948"
     num_results = 0
     expect = (
@@ -59,14 +58,13 @@ def test_make_header_contents_no_papers_found():
         "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n\n"
         "About this bot: https://github.com/kktsuji/arxiv-bot\n\n"
     )
-    result = _make_header_contents(day, day_m, query, num_results)
+    result = _make_header_contents(day, query, num_results)
     assert expect == result
 
 
 def test_make_header_contents_1_paper_found():
     """Unit test for _make_header_contents."""
     day = datetime.datetime(2024, 1, 1, 0, 0, 0, tzinfo=datetime.timezone.utc)
-    day_m = "Jan"
     query = "id:1812.04948"
     num_results = 1
     expect = (
@@ -77,14 +75,13 @@ def test_make_header_contents_1_paper_found():
         "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n\n"
         "About this bot: https://github.com/kktsuji/arxiv-bot\n\n"
     )
-    result = _make_header_contents(day, day_m, query, num_results)
+    result = _make_header_contents(day, query, num_results)
     assert expect == result
 
 
 def test_make_header_contents_2_papers_found():
     """Unit test for _make_header_contents."""
     day = datetime.datetime(2024, 1, 1, 0, 0, 0, tzinfo=datetime.timezone.utc)
-    day_m = "Jan"
     query = "id:1812.04948"
     num_results = 2
     expect = (
@@ -95,7 +92,7 @@ def test_make_header_contents_2_papers_found():
         "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n\n"
         "About this bot: https://github.com/kktsuji/arxiv-bot\n\n"
     )
-    result = _make_header_contents(day, day_m, query, num_results)
+    result = _make_header_contents(day, query, num_results)
     assert expect == result
 
 

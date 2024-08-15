@@ -38,7 +38,8 @@ def _get_arxiv_response(query):
     return results
 
 
-def _make_header_contents(day, day_m, query, num_results):
+def _make_header_contents(day, query, num_results):
+    day_m = day.strftime("%b")
     num = "No" if num_results == 0 else num_results
     found = f"{num} papers found.\n\n" if num != 1 else f"{num} paper found.\n\n"
     text = (
@@ -112,12 +113,11 @@ def _exec(params):
     categories = params["categories"].replace(" ", "").split(",")
 
     day = datetime.now(timezone.utc).date() - timedelta(days=1)
-    day_m = day.strftime("%b")
     query = _make_query(keywords, categories, day.strftime("%Y%m%d"))
     results = _get_arxiv_response(query)
     num_results = len(results)
 
-    contents = _make_header_contents(day, day_m, query, num_results)
+    contents = _make_header_contents(day, query, num_results)
     _requests_post(webhook_url, contents)
 
     for r in results:
