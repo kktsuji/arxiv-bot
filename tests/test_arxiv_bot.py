@@ -4,7 +4,12 @@ import datetime
 
 import arxiv
 
-from arxiv_bot import _make_query, _get_arxiv_response, _make_post_contents
+from arxiv_bot import (
+    _make_query,
+    _get_arxiv_response,
+    _make_header_contents,
+    _make_post_contents,
+)
 
 
 def test_make_query():
@@ -27,6 +32,60 @@ def test_get_arxiv_response():
     query = "id:1812.04948"
     expect = _EXPECTED_ARXIV_RESPONSE
     result = _get_arxiv_response(query)
+    assert expect == result
+
+
+def test_make_header_contents_no_papers_found():
+    """Unit test for _make_header_contents."""
+    day = datetime.datetime(2024, 1, 1, 0, 0, 0, tzinfo=datetime.timezone.utc)
+    day_m = "Jan"
+    query = "id:1812.04948"
+    num_results = 0
+    expect = (
+        "New papers on Jan 1, 2024.\n\n"
+        "No papers found.\n\n"
+        "--------------\n\n"
+        'arXiv query: "id:1812.04948"\n\n'
+        "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n\n"
+        "About this bot: https://github.com/kktsuji/arxiv-bot\n\n"
+    )
+    result = _make_header_contents(day, day_m, query, num_results)
+    assert expect == result
+
+
+def test_make_header_contents_1_paper_found():
+    """Unit test for _make_header_contents."""
+    day = datetime.datetime(2024, 1, 1, 0, 0, 0, tzinfo=datetime.timezone.utc)
+    day_m = "Jan"
+    query = "id:1812.04948"
+    num_results = 1
+    expect = (
+        "New papers on Jan 1, 2024.\n\n"
+        "1 paper found.\n\n"
+        "--------------\n\n"
+        'arXiv query: "id:1812.04948"\n\n'
+        "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n\n"
+        "About this bot: https://github.com/kktsuji/arxiv-bot\n\n"
+    )
+    result = _make_header_contents(day, day_m, query, num_results)
+    assert expect == result
+
+
+def test_make_header_contents_2_papers_found():
+    """Unit test for _make_header_contents."""
+    day = datetime.datetime(2024, 1, 1, 0, 0, 0, tzinfo=datetime.timezone.utc)
+    day_m = "Jan"
+    query = "id:1812.04948"
+    num_results = 2
+    expect = (
+        "New papers on Jan 1, 2024.\n\n"
+        "2 papers found.\n\n"
+        "--------------\n\n"
+        'arXiv query: "id:1812.04948"\n\n'
+        "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n\n"
+        "About this bot: https://github.com/kktsuji/arxiv-bot\n\n"
+    )
+    result = _make_header_contents(day, day_m, query, num_results)
     assert expect == result
 
 

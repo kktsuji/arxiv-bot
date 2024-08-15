@@ -34,6 +34,21 @@ def _get_arxiv_response(query):
     return results
 
 
+def _make_header_contents(day, day_m, query, num_results):
+    num = "No" if num_results == 0 else num_results
+    found = f"{num} papers found.\n\n" if num != 1 else f"{num} paper found.\n\n"
+    text = (
+        f"New papers on {day_m} {day.day}, {day.year}.\n\n"
+        + found
+        + "--------------\n\n"
+        f'arXiv query: "{query}"\n\n'
+        "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n\n"
+        "About this bot: https://github.com/kktsuji/arxiv-bot\n\n"
+    )
+
+    return text
+
+
 def _make_post_contents(r, abstract):
     text = (
         f"Title: {r.title}\n\n"
@@ -98,16 +113,8 @@ def _exec(params):
     results = _get_arxiv_response(query)
     num_results = len(results)
 
-    text = f"New papers on {day_m} {day.day}, {day.year}.\n\n"
-    num = "No" if num_results == 0 else num_results
-    text += f"{num} papers found.\n\n"
-    text += "--------------\n\n"
-    text += f'arXiv query: "{query}"\n\n'
-    text += (
-        "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n\n"
-    )
-    text += "About this bot: https://github.com/kktsuji/arxiv-bot\n\n"
-    _requests_post(webhook_url, text)
+    header = _make_header_contents(day, day_m, query, num_results)
+    _requests_post(webhook_url, header)
 
     for r in results:
         abstract = r.summary.replace("\n", " ")
