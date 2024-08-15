@@ -74,7 +74,7 @@ OPENAI_API_KEY=YOUR_API_KEY
 Execute script.
 
 ```python
-python main.py
+python arxiv_bot.py
 ```
 
 (Optional) Execute unit tests.
