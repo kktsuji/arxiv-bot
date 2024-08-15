@@ -23,7 +23,7 @@ def _make_query(keywords, categories, day):
     return query
 
 
-def _get_arxiv_results(query):
+def _get_arxiv_response(query):
     client = arxiv.Client()
     search = arxiv.Search(
         query=query,
@@ -95,7 +95,7 @@ def _exec(params):
     day = datetime.now(timezone.utc).date() - timedelta(days=1)
     day_m = day.strftime("%b")
     query = _make_query(keywords, categories, day.strftime("%Y%m%d"))
-    results = _get_arxiv_results(query)
+    results = _get_arxiv_response(query)
     num_results = len(results)
 
     text = f"New papers on {day_m} {day.day}, {day.year}.\n\n"
