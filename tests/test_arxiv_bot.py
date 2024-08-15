@@ -5,7 +5,7 @@ import datetime
 import arxiv
 import pytest
 
-from arxiv_bot import _make_query, _get_arxiv_response
+from arxiv_bot import _make_query, _get_arxiv_response, _make_post_contents
 
 
 def test_make_query():
@@ -28,6 +28,22 @@ def test_get_arxiv_response(_get_expected_arxiv_response):
     query = "id:1812.04948"
     expect = _get_expected_arxiv_response
     result = _get_arxiv_response(query)
+    assert expect == result
+
+
+def test_make_post_contents(_get_expected_arxiv_response):
+    """Unit test for _make_post_contents."""
+    r = _get_expected_arxiv_response[0]
+    abstract = "This is an abstract.\n\n"
+    expect = (
+        "Title: A Style-Based Generator Architecture for Generative Adversarial Networks\n\n"
+        "Authors: Tero Karras et al.\n\n"
+        "Published: 2018-12-12 13:59:43+00:00\n\n"
+        "Link: http://arxiv.org/abs/1812.04948v3\n\n"
+        "Categories: ['cs.NE', 'cs.LG', 'stat.ML']\n\n"
+        "This is an abstract.\n\n"
+    )
+    result = _make_post_contents(r, abstract)
     assert expect == result
 
 
