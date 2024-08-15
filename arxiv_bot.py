@@ -9,6 +9,10 @@ from openai import OpenAI
 import requests
 
 
+def _get_delimiter():
+    return "--------------\n\n"
+
+
 def _make_query(keywords, categories, day):
     # https://info.arxiv.org/help/api/user-manual.html for arXiv query syntax
     query = "%28"
@@ -40,8 +44,8 @@ def _make_header_contents(day, day_m, query, num_results):
     text = (
         f"New papers on {day_m} {day.day}, {day.year}.\n\n"
         + found
-        + "--------------\n\n"
-        f'arXiv query: "{query}"\n\n'
+        + _get_delimiter()
+        + f'arXiv query: "{query}"\n\n'
         "About arXiv query syntax: https://info.arxiv.org/help/api/user-manual.html\n\n"
         "About this bot: https://github.com/kktsuji/arxiv-bot\n\n"
     )
@@ -88,12 +92,12 @@ def _get_openai_response(title, abstract):
 
 
 def _requests_post(webhook_url, text):
-    tmp = "--------------\n\n"
+    dst = text + _get_delimiter()
     requests.post(
         webhook_url,
         data=json.dumps(
             {
-                "text": text + tmp,
+                "text": dst,
             }
         ),
         timeout=5.0,

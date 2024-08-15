@@ -6,12 +6,20 @@ import os
 import arxiv
 
 from arxiv_bot import (
+    _get_delimiter,
     _make_query,
     _get_arxiv_response,
     _make_header_contents,
     _make_main_contents,
     _get_openai_response,
 )
+
+
+def test_get_delimiter():
+    """Unit test for _get_delimiter."""
+    expect = "--------------\n\n"
+    result = _get_delimiter()
+    assert expect == result
 
 
 def test_make_query():
