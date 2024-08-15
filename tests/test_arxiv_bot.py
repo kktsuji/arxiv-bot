@@ -1,6 +1,7 @@
 """Unit tests for the main module."""
 
 import datetime
+import os
 
 import arxiv
 
@@ -9,6 +10,7 @@ from arxiv_bot import (
     _get_arxiv_response,
     _make_header_contents,
     _make_main_contents,
+    _get_openai_response,
 )
 
 
@@ -102,6 +104,24 @@ def test_make_main_contents():
         "This is an abstract.\n\n"
     )
     result = _make_main_contents(r, abstract)
+    assert expect == result
+
+
+def test_get_openai_response_authentication_error():
+    """Unit test for _get_openai_response."""
+    os.environ["OPENAI_API_KEY"] = "invalid_api_key"
+    title = "This is a title."
+    abstract = "This is an abstract.\n\n"
+    expect = (
+        "Error code: 401 - "
+        "{'error': {'message': 'Incorrect API key provided: invalid_***_key. "
+        "You can find your API key at https://platform.openai.com/account/api-keys.', "
+        "'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}"
+    )
+    try:
+        result = _get_openai_response(title, abstract)
+    except Exception as e:
+        result = str(e)
     assert expect == result
 
 
