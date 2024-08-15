@@ -8,7 +8,7 @@ from arxiv_bot import (
     _make_query,
     _get_arxiv_response,
     _make_header_contents,
-    _make_post_contents,
+    _make_main_contents,
 )
 
 
@@ -89,8 +89,8 @@ def test_make_header_contents_2_papers_found():
     assert expect == result
 
 
-def test_make_post_contents():
-    """Unit test for _make_post_contents."""
+def test_make_main_contents():
+    """Unit test for _make_main_contents."""
     r = _EXPECTED_ARXIV_RESPONSE[0]
     abstract = "This is an abstract.\n\n"
     expect = (
@@ -101,7 +101,7 @@ def test_make_post_contents():
         "Categories: ['cs.NE', 'cs.LG', 'stat.ML']\n\n"
         "This is an abstract.\n\n"
     )
-    result = _make_post_contents(r, abstract)
+    result = _make_main_contents(r, abstract)
     assert expect == result
 
 

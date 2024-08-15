@@ -49,7 +49,7 @@ def _make_header_contents(day, day_m, query, num_results):
     return text
 
 
-def _make_post_contents(r, abstract):
+def _make_main_contents(r, abstract):
     text = (
         f"Title: {r.title}\n\n"
         f"Authors: {r.authors[0]} et al.\n\n"
@@ -113,8 +113,8 @@ def _exec(params):
     results = _get_arxiv_response(query)
     num_results = len(results)
 
-    header = _make_header_contents(day, day_m, query, num_results)
-    _requests_post(webhook_url, header)
+    contents = _make_header_contents(day, day_m, query, num_results)
+    _requests_post(webhook_url, contents)
 
     for r in results:
         abstract = r.summary.replace("\n", " ")
@@ -122,8 +122,8 @@ def _exec(params):
             abstract = _get_openai_response(r.title, abstract) + "\n\n"
         else:
             abstract = f"Abstract: {abstract}\n\n"
-        text = _make_post_contents(r, abstract)
-        _requests_post(webhook_url, text)
+        contents = _make_main_contents(r, abstract)
+        _requests_post(webhook_url, contents)
 
 
 def lambda_handler(event, context):
