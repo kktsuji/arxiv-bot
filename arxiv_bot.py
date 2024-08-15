@@ -37,10 +37,10 @@ def _get_arxiv_response(query):
 def _make_post_contents(r, abstract):
     text = (
         f"Title: {r.title}\n\n"
-        "Authors: {r.authors[0]} et al.\n\n"
-        "Published: {r.published}\n\n"
-        "Link: {r.entry_id}\n\n"
-        "Categories: {r.categories}\n\n" + abstract
+        f"Authors: {r.authors[0]} et al.\n\n"
+        f"Published: {r.published}\n\n"
+        f"Link: {r.entry_id}\n\n"
+        f"Categories: {r.categories}\n\n" + abstract
     )
     return text
 
